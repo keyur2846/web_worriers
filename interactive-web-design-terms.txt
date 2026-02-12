@@ -1,0 +1,81 @@
+Interactive Web Design — Technical Terms Glossary
+===================================================
+
+CURSOR & MOUSE EFFECTS
+-----------------------
+Mouse-Tracked Parallax    — Layers move at different speeds based on cursor X/Y position
+Magnetic Button           — Element pulls toward cursor when nearby, snaps back on leave
+Custom Cursor             — Replace default cursor with a styled circle/dot that follows mouse
+Cursor Follower           — A trailing element that chases the cursor with eased delay
+Spotlight / Flashlight    — A glow or reveal area that follows the cursor on the page
+Hover Tilt (3D Card Tilt) — Card rotates on X/Y axes based on mouse position within the element
+Magnetic Hover            — Elements subtly gravitate toward cursor position
+Cursor Scaling            — Custom cursor changes size/shape when hovering interactive elements
+Repulsion Effect          — Elements push away from cursor (opposite of magnetic)
+
+SCROLL EFFECTS
+--------------
+Scroll-Driven Parallax    — Background layers move at different scroll speeds
+ScrollTrigger Pinning     — Section stays fixed while scroll-linked animation plays
+Horizontal Scroll         — Vertical scroll input drives horizontal movement
+Scrub Animation           — Animation progress maps 1:1 to scroll position
+Text Reveal on Scroll     — Words/lines fade in as you scroll through them
+Scroll Snapping           — Viewport snaps to section boundaries
+Infinite Scroll Marquee   — Text/images loop continuously in a ticker
+Scroll-Linked Progress Bar— Bar width maps to page scroll percentage
+Scroll Velocity Effects   — Animation speed/intensity changes based on how fast you scroll
+
+ANIMATION TECHNIQUES
+--------------------
+Tweening                  — Generating intermediate frames between two states
+Easing                    — Non-linear timing (ease-in, ease-out, elastic, bounce)
+Staggered Animation       — Elements animate in sequence with delay between each
+Spring Physics            — Elastic overshoot/bounce (like elastic.out)
+FLIP Animation            — First-Last-Invert-Play — performant layout transitions
+Morph / Shape Tween       — One shape smoothly transforms into another
+Crossfade                 — One element fades out while another fades in simultaneously
+Preloader Animation       — Entry animation that plays while page assets load
+
+3D & DEPTH
+----------
+Perspective Transform     — CSS perspective creates depth for child transforms
+rotateX / rotateY         — 3D rotation around horizontal/vertical axes
+preserve-3d               — Child elements maintain their own 3D space
+Depth Layering            — Stacking elements at different z-depths for parallax
+Parallax Depth            — Closer layers move more, farther layers move less
+
+MICRO-INTERACTIONS
+------------------
+Micro-interaction         — Small, contained animation responding to user action
+Hover State Transition    — Color/scale/position change on mouse enter/leave
+Direct Manipulation       — User feels they are physically moving digital objects
+Haptic Feedback (web)     — Visual "weight" in motion — deceleration, bounce, elasticity
+Tooltip Animation         — Animated info that appears near cursor on hover
+Ripple Effect             — Expanding circle from click point (Material Design style)
+
+LAYOUT & VISUAL
+---------------
+mix-blend-mode: difference— Auto-inverts colors based on background
+Noise Texture Overlay     — SVG grain filter for analog/film feel
+Radial Gradient Mesh      — Layered radial gradients creating depth
+Asymmetric Grid           — Intentionally unbalanced layout for editorial feel
+Dark/Light Alternation    — Sections alternate background colors for rhythm
+Chapter Navigation        — Numbered section markers (01, 02, 03...)
+
+SMOOTH SCROLLING
+----------------
+Lerp Scrolling (Lenis)    — Linear interpolation for buttery smooth scroll
+Momentum Scrolling        — Scroll continues with deceleration after input stops
+Scroll Hijacking          — Overriding native scroll to control animation pacing
+Virtual Scroll            — Translating content via transforms instead of native scroll
+
+===================================================
+Currently used in this project:
+  Mouse-Tracked Parallax, Hover Tilt, Magnetic Button, ScrollTrigger Pinning,
+  Scrub Animation, Horizontal Scroll, Staggered Animation, Crossfade,
+  Preloader Animation, Perspective Transform, Spring Physics, Easing,
+  mix-blend-mode: difference, Noise Texture Overlay, Lerp Scrolling (Lenis),
+  Dark/Light Alternation, Chapter Navigation, Text Reveal on Scroll,
+  Scroll-Linked Progress Bar, Depth Layering, Radial Gradient Mesh,
+  Custom Cursor, Cursor Follower, Cursor Scaling, Spotlight / Flashlight,
+  Ripple Effect, Infinite Scroll Marquee, Scroll Velocity Effects

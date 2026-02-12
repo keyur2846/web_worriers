@@ -1,0 +1,825 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEFENSE COMMAND TERMINAL — Design System
+   ═══════════════════════════════════════════════════════════════════════════
+   Three operational modes:
+     1. Day Ops    (default) — Desert command: warm ochre, deep olive, sand
+     2. Night Ops            — Stealth: deep navy, cold steel, muted phosphor
+     3. Tactical             — HUD terminal: black, bright green scanlines
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@custom-variant night-ops (&:where([data-theme="night-ops"], [data-theme="night-ops"] *));
+@custom-variant tactical (&:where([data-theme="tactical"], [data-theme="tactical"] *));
+
+@theme {
+  --color-primary: var(--mil-primary);
+  --color-primary-light: var(--mil-primary-light);
+  --color-primary-dark: var(--mil-primary-dark);
+
+  --color-accent: var(--mil-accent);
+  --color-accent-light: var(--mil-accent-light);
+  --color-accent-dark: var(--mil-accent-dark);
+
+  --color-surface: var(--mil-surface);
+  --color-surface-alt: var(--mil-surface-alt);
+
+  --color-bg: var(--mil-bg);
+  --color-bg-alt: var(--mil-bg-alt);
+
+  --color-text: var(--mil-text);
+  --color-text-muted: var(--mil-text-muted);
+  --color-text-inverse: var(--mil-text-inverse);
+
+  --color-border: var(--mil-border);
+  --color-border-strong: var(--mil-border-strong);
+
+  --color-danger: var(--mil-danger);
+  --color-warning: var(--mil-warning);
+  --color-success: var(--mil-success);
+  --color-info: var(--mil-info);
+
+  /* ── Static palette ── */
+  --color-olive-50: #f6f7f0;
+  --color-olive-100: #e8ebd8;
+  --color-olive-200: #d1d7b1;
+  --color-olive-300: #b3bc82;
+  --color-olive-400: #96a158;
+  --color-olive-500: #7a8a3a;
+  --color-olive-600: #5e6d2a;
+  --color-olive-700: #4a5d23;
+  --color-olive-800: #3a4a1c;
+  --color-olive-900: #2d3a14;
+  --color-olive-950: #1a2209;
+
+  --color-khaki-50: #fdfcf7;
+  --color-khaki-100: #f9f5e8;
+  --color-khaki-200: #f0e8cc;
+  --color-khaki-300: #e4d5a8;
+  --color-khaki-400: #d4be7e;
+  --color-khaki-500: #c4a35a;
+  --color-khaki-600: #a88a42;
+  --color-khaki-700: #8a6f34;
+  --color-khaki-800: #6e582a;
+  --color-khaki-900: #574522;
+  --color-khaki-950: #3a2e16;
+
+  --color-sand-50: #faf8f2;
+  --color-sand-100: #f5f0e8;
+  --color-sand-200: #ebe3d4;
+  --color-sand-300: #ddd2b8;
+  --color-sand-400: #ccbd98;
+  --color-sand-500: #bba87a;
+  --color-sand-600: #a08c5e;
+  --color-sand-700: #82714a;
+  --color-sand-800: #675a3b;
+  --color-sand-900: #50462e;
+  --color-sand-950: #352e1e;
+
+  --color-tactical-tan: #c9b896;
+  --color-ranger-green: #4a5d23;
+  --color-coyote-brown: #81613c;
+  --color-foliage-green: #667b53;
+  --color-field-drab: #6b5b37;
+
+  --color-navy-900: #0a1628;
+  --color-navy-800: #0f2038;
+  --color-navy-700: #162d4a;
+  --color-navy-600: #1e3a5f;
+  --color-navy-500: #003366;
+  --color-charcoal-900: #141414;
+  --color-charcoal-800: #1c1c1c;
+  --color-charcoal-700: #262626;
+  --color-charcoal-600: #333333;
+  --color-charcoal-500: #404040;
+
+  --color-hud-green: #00ff41;
+  --color-hud-amber: #ff8c00;
+  --color-hud-red: #ff2222;
+  --color-hud-cyan: #00e5ff;
+
+  --color-saffron: #ff9933;
+  --color-tricolor-white: #ffffff;
+  --color-flag-green: #138808;
+  --color-navy-chakra: #000080;
+
+  /* ── Typography ── */
+  --font-heading: "Rajdhani", "Saira Condensed", sans-serif;
+  --font-display: "Oswald", "Barlow Condensed", sans-serif;
+  --font-body: "Inter", "Source Sans 3", sans-serif;
+  --font-slab: "Bitter", "Roboto Slab", serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Source Code Pro", monospace;
+  --font-stencil: "Black Ops One", "Special Elite", cursive;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DAY OPS — Desert Command Post
+   Darker, more saturated — not washed-out cream
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --mil-primary: #4a5d23;
+  --mil-primary-light: #6b7f3a;
+  --mil-primary-dark: #2d3a14;
+
+  --mil-accent: #c4a35a;
+  --mil-accent-light: #d4be7e;
+  --mil-accent-dark: #a88a42;
+
+  --mil-surface: #e8e0d0;
+  --mil-surface-alt: #ddd4c0;
+
+  --mil-bg: #d6ccb8;
+  --mil-bg-alt: #cec4ae;
+
+  --mil-text: #1a1a10;
+  --mil-text-muted: #4a4a3a;
+  --mil-text-inverse: #faf8f2;
+
+  --mil-border: #b5ad98;
+  --mil-border-strong: #8a826e;
+
+  --mil-danger: #b91c1c;
+  --mil-warning: #d97706;
+  --mil-success: #3a7a23;
+  --mil-info: #1e5a8a;
+
+  --noise-opacity: 0.04;
+  --vignette-opacity: 0.15;
+
+  color-scheme: light;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NIGHT OPS — Stealth Operations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="night-ops"] {
+  --mil-primary: #5a7a4a;
+  --mil-primary-light: #6e8f5c;
+  --mil-primary-dark: #3a5a2a;
+
+  --mil-accent: #8b9a6b;
+  --mil-accent-light: #a3b288;
+  --mil-accent-dark: #6e7d52;
+
+  --mil-surface: #1a2030;
+  --mil-surface-alt: #222a3a;
+
+  --mil-bg: #0c1220;
+  --mil-bg-alt: #121a2a;
+
+  --mil-text: #c8d0c0;
+  --mil-text-muted: #6a7a6a;
+  --mil-text-inverse: #0c1220;
+
+  --mil-border: #2a3a4a;
+  --mil-border-strong: #3a4a5a;
+
+  --mil-danger: #ef4444;
+  --mil-warning: #f59e0b;
+  --mil-success: #4ade80;
+  --mil-info: #38bdf8;
+
+  --noise-opacity: 0.06;
+  --vignette-opacity: 0.3;
+
+  color-scheme: dark;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TACTICAL — HUD Terminal Mode
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="tactical"] {
+  --mil-primary: #00ff41;
+  --mil-primary-light: #33ff66;
+  --mil-primary-dark: #00cc33;
+
+  --mil-accent: #ff8c00;
+  --mil-accent-light: #ffaa33;
+  --mil-accent-dark: #cc7000;
+
+  --mil-surface: #0a0a0a;
+  --mil-surface-alt: #111111;
+
+  --mil-bg: #000000;
+  --mil-bg-alt: #050505;
+
+  --mil-text: #00ff41;
+  --mil-text-muted: #008f24;
+  --mil-text-inverse: #000000;
+
+  --mil-border: #1a3a1a;
+  --mil-border-strong: #00ff41;
+
+  --mil-danger: #ff2222;
+  --mil-warning: #ff8c00;
+  --mil-success: #00ff41;
+  --mil-info: #00e5ff;
+
+  --noise-opacity: 0.08;
+  --vignette-opacity: 0.4;
+
+  color-scheme: dark;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    position: relative;
+  }
+
+  /* ── Noise grain overlay ── */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+    mix-blend-mode: overlay;
+  }
+
+  /* ── Scanline effect (tactical mode only) ── */
+  [data-theme="tactical"] body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 2px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+  }
+
+  /* Lenis smooth scroll */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: 0;
+  }
+
+  /* ── Custom cursor for tactical ── */
+  [data-theme="tactical"] {
+    cursor: crosshair;
+  }
+
+  [data-theme="tactical"] a,
+  [data-theme="tactical"] button {
+    cursor: crosshair;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CUSTOM UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Glass Panel with corner brackets ── */
+@utility glass-panel {
+  position: relative;
+  background: color-mix(in oklab, var(--color-surface) 60%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid color-mix(in oklab, var(--color-border) 40%, transparent);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ── Corner bracket decorations ── */
+@utility bracket-corners {
+  position: relative;
+}
+
+/* ── Military label ── */
+@utility label-military {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: color-mix(in oklab, var(--color-bg) 85%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  padding: 0.3rem 0.75rem;
+  color: var(--color-text-muted);
+}
+
+@utility stencil-text {
+  font-family: var(--font-stencil);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@utility display-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+@utility heading-text {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@utility slab-text {
+  font-family: var(--font-slab);
+  font-weight: 600;
+}
+
+@utility mono-readout {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* ── Typographic scale for hero/display text ── */
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  text-shadow: 0 0 40px rgba(196,163,90,0.3), 0 2px 4px rgba(0,0,0,0.5);
+}
+
+@utility display-section {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-shadow: 0 0 30px rgba(196,163,90,0.4), 0 0 60px rgba(196,163,90,0.15);
+}
+
+/* ── Gold accent text (used across many sections) ── */
+@utility text-gold {
+  color: #c4a35a;
+  text-shadow: 0 0 12px rgba(196,163,90,0.4);
+}
+
+@utility text-cream {
+  color: #e8e0d0;
+}
+
+@utility text-muted-sand {
+  color: #a09880;
+}
+
+@utility text-warm {
+  color: #c8c0b0;
+}
+
+/* ── Gradient accent line used as heading divider ── */
+@utility gold-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c4a35a, transparent);
+}
+
+@utility hud-border {
+  border: 1px solid var(--color-primary);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--color-primary) 25%, transparent),
+              inset 0 0 8px color-mix(in oklab, var(--color-primary) 10%, transparent);
+}
+
+@utility tactical-glow {
+  text-shadow: 0 0 8px color-mix(in oklab, var(--color-primary) 60%, transparent),
+               0 0 20px color-mix(in oklab, var(--color-primary) 30%, transparent),
+               0 0 40px color-mix(in oklab, var(--color-primary) 15%, transparent);
+}
+
+@utility scene-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* ── Angled button style ── */
+@utility btn-tactical {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  padding: 0.625rem 1.5rem;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: all 0.2s ease;
+}
+
+/* ── Classification stamp ── */
+@utility classification-stamp {
+  font-family: var(--font-stencil);
+  font-size: 0.625rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-danger) 40%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-danger) 20%, transparent);
+  padding: 0.2rem 0.5rem;
+  transform: rotate(-2deg);
+}
+
+/* ── Vignette overlay for canvas ── */
+@utility vignette-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    color-mix(in oklab, var(--color-bg) var(--vignette-opacity), transparent) 100%
+  );
+}
+
+/* ── Hash pattern background ── */
+@utility hash-pattern {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    color-mix(in oklab, var(--color-border) 15%, transparent) 10px,
+    color-mix(in oklab, var(--color-border) 15%, transparent) 11px
+  );
+}
+
+/* ── Horizontal rule with military style ── */
+@utility divider-mil {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent) 20%,
+    var(--color-accent) 80%,
+    transparent
+  );
+  opacity: 0.3;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENT STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Corner bracket decoration for panels */
+.corner-brackets::before,
+.corner-brackets::after,
+.corner-brackets > .cb-inner::before,
+.corner-brackets > .cb-inner::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--color-accent);
+  border-style: solid;
+  opacity: 0.7;
+  z-index: 1;
+  filter: drop-shadow(0 0 3px color-mix(in oklab, var(--color-accent) 50%, transparent));
+}
+
+.corner-brackets::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+.corner-brackets::after {
+  top: -1px;
+  right: -1px;
+  border-width: 2px 2px 0 0;
+}
+
+.corner-brackets > .cb-inner::before {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 2px 2px;
+}
+
+.corner-brackets > .cb-inner::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Input field styling */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+/* Focus ring */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 30%, transparent);
+}
+
+/* Tactical mode glow on focused inputs */
+[data-theme="tactical"] input:focus,
+[data-theme="tactical"] textarea:focus {
+  box-shadow: 0 0 6px color-mix(in oklab, var(--color-primary) 40%, transparent),
+              0 0 0 1px var(--color-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+/* Tactical text flicker */
+[data-theme="tactical"] .tactical-flicker {
+  animation: flicker 4s infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARALLAX SYSTEM — All keyframes consolidated here (no inline <style> tags)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes filmGrain {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-2px, 1px); }
+  66% { transform: translate(1px, -2px); }
+  100% { transform: translate(2px, 2px); }
+}
+
+@keyframes dust-float {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.7; }
+  100% { transform: translateY(-60px) translateX(25px); opacity: 0; }
+}
+
+@keyframes dust-float-golden {
+  0% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-30px) translateX(10px); opacity: 0.2; }
+}
+
+@keyframes heat-shimmer {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  25% { transform: scaleY(1.002) translateY(-1px); }
+  50% { transform: scaleY(0.998) translateY(1px); }
+  75% { transform: scaleY(1.001) translateY(-0.5px); }
+}
+
+@keyframes carrier-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  10% { transform: translate(-3px, 2px) rotate(-0.3deg); }
+  20% { transform: translate(2px, -2px) rotate(0.2deg); }
+  30% { transform: translate(-1px, 3px) rotate(-0.1deg); }
+  40% { transform: translate(3px, -1px) rotate(0.3deg); }
+  50% { transform: translate(-2px, 1px) rotate(-0.2deg); }
+  60% { transform: translate(1px, -3px) rotate(0.1deg); }
+  70% { transform: translate(-3px, 2px) rotate(-0.3deg); }
+  80% { transform: translate(2px, -2px) rotate(0.2deg); }
+  90% { transform: translate(-1px, 1px) rotate(-0.1deg); }
+}
+
+@keyframes scope-breathe {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(0.3px, 0.5px) scale(1.002); }
+  50% { transform: translate(-0.2px, -0.3px) scale(0.998); }
+  75% { transform: translate(0.1px, 0.2px) scale(1.001); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes chakra-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes god-ray-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes seabird-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes debris-float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  50% { opacity: 0.6; }
+  100% { transform: translateY(-30px) rotate(180deg); opacity: 0; }
+}
+
+@keyframes approach-blink {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.5); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+/* ── Scene image theme filters ── */
+.scene-image {
+  transition: filter 0.4s ease;
+}
+
+[data-theme="night-ops"] .scene-image {
+  filter: saturate(0.85) brightness(0.85) contrast(1.05);
+}
+
+[data-theme="tactical"] .scene-image {
+  filter: contrast(1.2) saturate(0.6) brightness(0.9);
+}
+
+/* ── Tactical green overlay on parallax sections ── */
+[data-theme="tactical"] .parallax-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 255, 65, 0.03);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ── Dust particle base style ── */
+.dust-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(200, 180, 140, 0.5);
+  animation: dust-float ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Star field via box-shadow ── */
+.star-field {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+
+.star-field::before,
+.star-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+/* ── Star twinkle animation class ── */
+.star-twinkle {
+  animation: star-twinkle 4s ease-in-out infinite alternate;
+}
+
+/* ── God ray rotation ── */
+.god-ray-rotate {
+  animation: god-ray-rotate 120s linear infinite;
+}
+
+/* ── Heat shimmer layer ── */
+.heat-shimmer {
+  animation: heat-shimmer 4s ease-in-out infinite;
+  filter: blur(2px);
+}
+
+/* ── Scope breathe animation ── */
+.scope-breathe {
+  animation: scope-breathe 3.5s ease-in-out infinite;
+}
+
+/* ── Debris float animation ── */
+.debris-float {
+  animation: debris-float ease-out infinite;
+}
+
+/* ── Approach light blink ── */
+.approach-light-blink {
+  animation: approach-blink 1.5s ease-in-out infinite;
+}
+
+/* ── Golden glow pulse (decorative) ── */
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+  filter: blur(22px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .dust-particle,
+  .heat-shimmer,
+  .scope-breathe,
+  .debris-float,
+  .star-twinkle,
+  .god-ray-rotate,
+  .glow-pulse,
+  .approach-light-blink,
+  .star-field::before,
+  .star-field::after {
+    animation: none !important;
+  }
+
+  .scene-image {
+    transition: none !important;
+  }
+}
