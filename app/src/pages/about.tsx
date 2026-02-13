@@ -194,6 +194,81 @@ export function AboutPage() {
           ))}
         </div>
       </motion.div>
+
+      {/* Developer */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        className="glass-panel corner-brackets relative p-6 md:p-8 mt-8"
+      >
+        <div className="cb-inner" />
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-1 h-5 bg-[var(--color-accent)]" />
+          <h2
+            className="text-lg tracking-[0.08em]"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            DEVELOPER
+          </h2>
+        </div>
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1 space-y-3">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-[var(--color-accent)] bg-opacity-20 border border-[var(--color-accent)] flex items-center justify-center">
+                <span
+                  className="text-[var(--color-accent)] text-lg font-bold"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  KP
+                </span>
+              </div>
+              <div>
+                <h3
+                  className="text-base tracking-[0.05em]"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  KEYUR PARMAR
+                </h3>
+                <span className="mono-readout text-text-muted text-[0.65rem]">
+                  Full-Stack Developer
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2 pl-4 border-l border-border">
+              <div className="flex justify-between items-baseline gap-4">
+                <span className="mono-readout text-text-muted text-[0.65rem]">University</span>
+                <span className="mono-readout text-[0.7rem]">Parul University</span>
+              </div>
+              <div className="flex justify-between items-baseline gap-4">
+                <span className="mono-readout text-text-muted text-[0.65rem]">Enrollment</span>
+                <span className="mono-readout text-[0.7rem]">2303051051122</span>
+              </div>
+              <div className="flex justify-between items-baseline gap-4">
+                <span className="mono-readout text-text-muted text-[0.65rem]">Email</span>
+                <a
+                  href="mailto:keyur2846@gmail.com"
+                  className="mono-readout text-[0.7rem] text-[var(--color-accent)] hover:underline"
+                >
+                  keyur2846@gmail.com
+                </a>
+              </div>
+              <div className="flex justify-between items-baseline gap-4">
+                <span className="mono-readout text-text-muted text-[0.65rem]">GitHub</span>
+                <a
+                  href="https://github.com/keyur2846"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mono-readout text-[0.7rem] text-[var(--color-accent)] hover:underline"
+                >
+                  github.com/keyur2846
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </>
   );
 }

@@ -81,16 +81,16 @@ function ramp(progress: number, start: number, end: number): number {
 
 /* ── Army tooltip anchor math ── */
 const BODY_ANCHORS = [
-  { imgX: 0.48, imgY: 0.11 },
-  { imgX: 0.52, imgY: 0.21 },
-  { imgX: 0.47, imgY: 0.36 },
-  { imgX: 0.40, imgY: 0.46 },
+  { imgX: 0.50, imgY: 0.08 },   // Helmet — top of head
+  { imgX: 0.54, imgY: 0.18 },   // Tactical Comms — right ear/shoulder
+  { imgX: 0.50, imgY: 0.32 },   // Body Armor — center chest
+  { imgX: 0.42, imgY: 0.52 },   // AK-203 Rifle — hands/rifle
 ];
 const LINE_OFFSETS = [
-  { dx: -7, dy: -2 },
-  { dx: -9, dy: -1 },
-  { dx: -8, dy: 1 },
-  { dx: -6, dy: 2 },
+  { dx: -8, dy: -1 },
+  { dx: -10, dy: -1 },
+  { dx: -9, dy: 0 },
+  { dx: -7, dy: 1 },
 ];
 
 function anchorToPct(imgXFrac: number, imgYFrac: number, cw: number, ch: number) {

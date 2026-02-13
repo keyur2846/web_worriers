@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const CONTACT_INFO = [
-  { label: "Base of Operations", value: "Mumbai, Maharashtra, India", code: "LOC" },
-  { label: "Communication", value: "contact@missionintel.in", code: "COM" },
-  { label: "Status", value: "Operational 24/7", code: "STS" },
+  { label: "Developer", value: "Keyur Parmar", code: "DEV" },
+  { label: "University", value: "Parul University, Vadodara", code: "UNI" },
+  { label: "Email", value: "keyur2846@gmail.com", code: "COM", href: "mailto:keyur2846@gmail.com" },
+  { label: "GitHub", value: "github.com/keyur2846", code: "GIT", href: "https://github.com/keyur2846" },
 ];
 
 export function ContactPage() {
@@ -82,7 +83,18 @@ export function ContactPage() {
                   <span className="mono-readout text-text-muted block mb-1">
                     {item.label}
                   </span>
-                  <p className="text-sm font-medium">{item.value}</p>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target={item.href.startsWith("mailto") ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      className="text-sm font-medium text-[var(--color-accent)] hover:underline"
+                    >
+                      {item.value}
+                    </a>
+                  ) : (
+                    <p className="text-sm font-medium">{item.value}</p>
+                  )}
                 </div>
               </div>
             </div>
