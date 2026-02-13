@@ -103,6 +103,14 @@
   --color-flag-green: #138808;
   --color-navy-chakra: #000080;
 
+  /* ── Per-branch accents ── */
+  --branch-army: #c4a35a;
+  --branch-army-glow: rgba(196, 163, 90, 0.4);
+  --branch-af: #5b8dd9;
+  --branch-af-glow: rgba(91, 141, 217, 0.4);
+  --branch-navy: #4ecdc4;
+  --branch-navy-glow: rgba(78, 205, 196, 0.4);
+
   /* ── Typography ── */
   --font-heading: "Rajdhani", "Saira Condensed", sans-serif;
   --font-display: "Oswald", "Barlow Condensed", sans-serif;
@@ -361,12 +369,47 @@
 /* ── Glass Panel with corner brackets ── */
 @utility glass-panel {
   position: relative;
-  background: color-mix(in oklab, var(--color-surface) 60%, transparent);
-  backdrop-filter: blur(16px) saturate(1.2);
-  border: 1px solid color-mix(in oklab, var(--color-border) 40%, transparent);
+  background: rgba(10, 14, 20, 0.75);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 2px solid var(--panel-accent, var(--branch-army));
+  border-radius: 4px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 20px var(--panel-glow, var(--branch-army-glow)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+/* Scanline texture on glass panels */
+.glass-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.015) 2px,
+    rgba(255, 255, 255, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+  border-radius: inherit;
+}
+
+/* Branch-specific panel accents */
+.glass-panel-army {
+  --panel-accent: var(--branch-army);
+  --panel-glow: var(--branch-army-glow);
+}
+.glass-panel-af {
+  --panel-accent: var(--branch-af);
+  --panel-glow: var(--branch-af-glow);
+}
+.glass-panel-navy {
+  --panel-accent: var(--branch-navy);
+  --panel-glow: var(--branch-navy-glow);
 }
 
 /* ── Corner bracket decorations ── */
@@ -470,8 +513,9 @@
 
 /* ── Gradient accent line used as heading divider ── */
 @utility gold-divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, #c4a35a, transparent);
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--branch-accent, #c4a35a), transparent);
+  box-shadow: 0 0 8px var(--branch-accent-glow, rgba(196, 163, 90, 0.3));
 }
 
 @utility hud-border {
@@ -953,6 +997,51 @@ select:focus {
 /* ── Scope breathe animation ── */
 .scope-breathe {
   animation: scope-breathe 3.5s ease-in-out infinite;
+}
+
+/* ── Cinematic scan-line overlay ── */
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* ── Cinematic vignette overlay ── */
+.vignette-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+/* ── Radar ping for tooltip markers ── */
+@keyframes radar-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
 }
 
 /* ── Debris float animation ── */

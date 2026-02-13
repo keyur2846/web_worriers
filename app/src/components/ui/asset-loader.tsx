@@ -44,6 +44,7 @@ export function AssetLoader({ onComplete }: AssetLoaderProps) {
   const textRef = useRef<HTMLDivElement>(null);
 
   const [showOverlay, setShowOverlay] = useState(true);
+  const showOverlayRef = useRef(true);
   const [progress, setProgress] = useState(0);
   const loadedCountRef = useRef(0);
   const hasCompletedRef = useRef(false);
@@ -59,8 +60,13 @@ export function AssetLoader({ onComplete }: AssetLoaderProps) {
       setProgress(1);
       sessionStorage.setItem(SESSION_KEY, "1");
       setLoaded();
+
+      // If overlay is already hidden (cached session), fire onComplete immediately
+      if (!showOverlayRef.current) {
+        onComplete();
+      }
     }
-  }, [setLoaded]);
+  }, [setLoaded, onComplete]);
 
   /** Preload all assets (runs once) */
   useEffect(() => {
@@ -70,9 +76,10 @@ export function AssetLoader({ onComplete }: AssetLoaderProps) {
     const alreadyCached = sessionStorage.getItem(SESSION_KEY) === "1";
     if (alreadyCached) {
       setShowOverlay(false);
+      showOverlayRef.current = false;
     }
 
-    // Build frame images
+    // Build frame images — ONLY set into array on load, not before
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
       const idx = i;
@@ -82,7 +89,6 @@ export function AssetLoader({ onComplete }: AssetLoaderProps) {
       };
       img.onerror = () => onItemLoaded();
       img.src = getFrameSrc(i);
-      setPreloadedFrame(i, img);
     }
 
     // Static images

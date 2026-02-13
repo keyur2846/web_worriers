@@ -385,19 +385,25 @@ export function CinematicSection() {
             const fo = ramp(p, de, fe);
 
             if (armyHeadingRef.current) {
-              gsap.set(armyHeadingRef.current, { opacity: hd * (1 - fo), xPercent: -30 * (1 - hd) });
+              gsap.set(armyHeadingRef.current, { opacity: hd * (1 - fo), xPercent: -30 * (1 - hd), filter: `blur(${4 * (1 - hd)}px)` });
             }
-            [armyDescRef, armyPanelRef].forEach((ref) => {
-              if (ref.current) gsap.set(ref.current, { opacity: dc * (1 - fo), y: 20 * (1 - dc) });
-            });
+            if (armyDescRef.current) {
+              gsap.set(armyDescRef.current, { opacity: dc * (1 - fo), y: 20 * (1 - dc), filter: `blur(${3 * (1 - dc)}px)` });
+            }
+            if (armyPanelRef.current) {
+              const panelT = ramp(p, ds + r_ * 0.2, ds + r_ * 0.45);
+              const panelScale = panelT < 1 ? 0.92 + 0.1 * panelT * (1 + 0.15 * Math.sin(panelT * Math.PI)) : 1;
+              gsap.set(armyPanelRef.current, { opacity: panelT * (1 - fo), y: 30 * (1 - panelT), scale: panelScale });
+            }
             if (svgDots) gsap.set(svgDots, { opacity: 0.9 * sv * (1 - fo) });
             if (svgLines) gsap.set(svgLines, { attr: { "stroke-dashoffset": 1 - sv } });
             if (armySvgRef.current) gsap.set(armySvgRef.current, { opacity: 1 - fo });
             armyTips.forEach((t, i) => {
               if (!t) return;
-              const st = i * 0.02;
+              const st = i * 0.03;
               const sh = ramp(p, ds + r_ * (0.35 + st), ds + r_ * (0.55 + st));
-              gsap.set(t, { opacity: sh * (1 - fo), y: 12 * (1 - sh), scale: 0.95 + 0.05 * sh });
+              const tipScale = sh < 1 ? sh * (1 + 0.15 * Math.sin(sh * Math.PI)) : 1;
+              gsap.set(t, { opacity: sh * (1 - fo), y: 16 * (1 - sh), scale: tipScale });
             });
           }
 
@@ -413,16 +419,22 @@ export function CinematicSection() {
             const fo = ramp(p, de, fe);
 
             if (afHeadingRef.current) {
-              gsap.set(afHeadingRef.current, { opacity: hd * (1 - fo), xPercent: -20 * (1 - hd) });
+              gsap.set(afHeadingRef.current, { opacity: hd * (1 - fo), xPercent: -20 * (1 - hd), filter: `blur(${4 * (1 - hd)}px)` });
             }
-            [afDescRef, afPanelRef].forEach((ref) => {
-              if (ref.current) gsap.set(ref.current, { opacity: dc * (1 - fo), y: 20 * (1 - dc) });
-            });
+            if (afDescRef.current) {
+              gsap.set(afDescRef.current, { opacity: dc * (1 - fo), y: 20 * (1 - dc), filter: `blur(${3 * (1 - dc)}px)` });
+            }
+            if (afPanelRef.current) {
+              const panelT = ramp(p, ds + r_ * 0.2, ds + r_ * 0.45);
+              const panelScale = panelT < 1 ? 0.92 + 0.1 * panelT * (1 + 0.15 * Math.sin(panelT * Math.PI)) : 1;
+              gsap.set(afPanelRef.current, { opacity: panelT * (1 - fo), y: 30 * (1 - panelT), scale: panelScale });
+            }
             if (afTooltipAreaRef.current) {
               afTooltipAreaRef.current.querySelectorAll(".tooltip-item").forEach((t, i) => {
-                const st = i * 0.02;
+                const st = i * 0.03;
                 const sh = ramp(p, ds + r_ * (0.3 + st), ds + r_ * (0.55 + st));
-                gsap.set(t, { opacity: sh * (1 - fo), y: 12 * (1 - sh), scale: 0.95 + 0.05 * sh });
+                const tipScale = sh < 1 ? sh * (1 + 0.15 * Math.sin(sh * Math.PI)) : 1;
+                gsap.set(t, { opacity: sh * (1 - fo), y: 16 * (1 - sh), scale: tipScale });
               });
             }
           }
@@ -439,16 +451,22 @@ export function CinematicSection() {
             const fo = ramp(p, de, fe);
 
             if (navyHeadingRef.current) {
-              gsap.set(navyHeadingRef.current, { opacity: hd * (1 - fo), xPercent: -20 * (1 - hd) });
+              gsap.set(navyHeadingRef.current, { opacity: hd * (1 - fo), xPercent: -20 * (1 - hd), filter: `blur(${4 * (1 - hd)}px)` });
             }
-            [navyDescRef, navyPanelRef].forEach((ref) => {
-              if (ref.current) gsap.set(ref.current, { opacity: dc * (1 - fo), y: 20 * (1 - dc) });
-            });
+            if (navyDescRef.current) {
+              gsap.set(navyDescRef.current, { opacity: dc * (1 - fo), y: 20 * (1 - dc), filter: `blur(${3 * (1 - dc)}px)` });
+            }
+            if (navyPanelRef.current) {
+              const panelT = ramp(p, ds + r_ * 0.2, ds + r_ * 0.45);
+              const panelScale = panelT < 1 ? 0.92 + 0.1 * panelT * (1 + 0.15 * Math.sin(panelT * Math.PI)) : 1;
+              gsap.set(navyPanelRef.current, { opacity: panelT * (1 - fo), y: 30 * (1 - panelT), scale: panelScale });
+            }
             if (navyTooltipAreaRef.current) {
               navyTooltipAreaRef.current.querySelectorAll(".tooltip-item").forEach((t, i) => {
-                const st = i * 0.02;
+                const st = i * 0.03;
                 const sh = ramp(p, ds + r_ * (0.3 + st), ds + r_ * (0.55 + st));
-                gsap.set(t, { opacity: sh * (1 - fo), y: 12 * (1 - sh), scale: 0.95 + 0.05 * sh });
+                const tipScale = sh < 1 ? sh * (1 + 0.15 * Math.sin(sh * Math.PI)) : 1;
+                gsap.set(t, { opacity: sh * (1 - fo), y: 16 * (1 - sh), scale: tipScale });
               });
             }
           }
@@ -607,9 +625,9 @@ export function CinematicSection() {
               <div ref={armyHeadingRef} style={{ opacity: 0 }}>
                 <h2
                   className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-[0.1em] mb-2"
-                  style={{ fontFamily: "var(--font-display)", color: "#c4a35a", textShadow: "0 0 30px rgba(196,163,90,0.4), 0 2px 8px rgba(0,0,0,0.8)" }}
+                  style={{ fontFamily: "var(--font-stencil)", color: "var(--branch-army)", textShadow: "0 0 30px var(--branch-army-glow), 0 2px 8px rgba(0,0,0,0.8)" }}
                 >INDIAN<br />ARMY</h2>
-                <div className="gold-divider w-32" />
+                <div className="gold-divider w-32" style={{ "--branch-accent": "var(--branch-army)", "--branch-accent-glow": "var(--branch-army-glow)" } as React.CSSProperties} />
               </div>
 
               <div ref={armyDescRef} style={{ opacity: 0 }}>
@@ -619,12 +637,12 @@ export function CinematicSection() {
               </div>
 
               <div ref={armyPanelRef} className="pointer-events-auto" style={{ opacity: 0 }}>
-                <div className="glass-panel p-5 space-y-3 corner-brackets max-w-sm">
+                <div className="glass-panel glass-panel-army p-5 space-y-3 corner-brackets max-w-sm">
                   <div className="cb-inner">
                     <div className="flex items-center gap-3 mb-1">
-                      <div className="w-1.5 h-4" style={{ backgroundColor: "#c4a35a", boxShadow: "0 0 8px rgba(196,163,90,0.5)" }} />
+                      <div className="w-1.5 h-4" style={{ backgroundColor: "var(--branch-army)", boxShadow: "0 0 8px var(--branch-army-glow)" }} />
                       <div>
-                        <h3 className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ fontFamily: "var(--font-heading)", color: "#c4a35a" }}>Infantry Loadout</h3>
+                        <h3 className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--branch-army)" }}>Infantry Loadout</h3>
                         <p className="mono-readout text-[var(--color-text-muted)] text-[0.65rem] mt-0.5">Modern Combat Equipment</p>
                       </div>
                     </div>
@@ -684,9 +702,9 @@ export function CinematicSection() {
               <div ref={afHeadingRef} style={{ opacity: 0 }}>
                 <h2
                   className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-[0.1em] mb-2"
-                  style={{ fontFamily: "var(--font-display)", color: "#c4a35a", textShadow: "0 0 30px rgba(196,163,90,0.4), 0 2px 8px rgba(0,0,0,0.8)" }}
+                  style={{ fontFamily: "var(--font-stencil)", color: "var(--branch-af)", textShadow: "0 0 30px var(--branch-af-glow), 0 2px 8px rgba(0,0,0,0.8)" }}
                 >INDIAN<br />AIR FORCE</h2>
-                <div className="gold-divider w-28" />
+                <div className="gold-divider w-28" style={{ "--branch-accent": "var(--branch-af)", "--branch-accent-glow": "var(--branch-af-glow)" } as React.CSSProperties} />
               </div>
 
               <div ref={afDescRef} style={{ opacity: 0 }}>
@@ -696,12 +714,12 @@ export function CinematicSection() {
               </div>
 
               <div ref={afPanelRef} className="pointer-events-auto" style={{ opacity: 0 }}>
-                <div className="glass-panel p-5 space-y-3 corner-brackets max-w-sm">
+                <div className="glass-panel glass-panel-af p-5 space-y-3 corner-brackets max-w-sm">
                   <div className="cb-inner">
                     <div className="flex items-center gap-3 mb-1">
-                      <div className="w-1.5 h-4" style={{ backgroundColor: "#c4a35a", boxShadow: "0 0 8px rgba(196,163,90,0.5)" }} />
+                      <div className="w-1.5 h-4" style={{ backgroundColor: "var(--branch-af)", boxShadow: "0 0 8px var(--branch-af-glow)" }} />
                       <div>
-                        <h3 className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ fontFamily: "var(--font-heading)", color: "#c4a35a" }}>HAL Tejas LCA</h3>
+                        <h3 className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--branch-af)" }}>HAL Tejas LCA</h3>
                         <p className="mono-readout text-[var(--color-text-muted)] text-[0.65rem] mt-0.5">Indigenous Light Combat Aircraft</p>
                       </div>
                     </div>
@@ -713,7 +731,7 @@ export function CinematicSection() {
                       <InfoRow label="Ceiling" value="15,250 m" />
                     </div>
                     <div className="divider-mil my-3" />
-                    <h4 className="text-[0.6rem] tracking-[0.2em] uppercase font-semibold mb-2" style={{ fontFamily: "var(--font-heading)", color: "#c4a35a" }}>Armament</h4>
+                    <h4 className="text-[0.6rem] tracking-[0.2em] uppercase font-semibold mb-2" style={{ fontFamily: "var(--font-heading)", color: "var(--branch-af)" }}>Armament</h4>
                     <div className="space-y-1.5">
                       <InfoRow label="Cannon" value="23mm GSh-23" />
                       <InfoRow label="BVR" value="Derby / Astra" />
@@ -729,16 +747,16 @@ export function CinematicSection() {
         {/* AF tooltips */}
         <div ref={afTooltipAreaRef} className="absolute inset-0 z-[7] pointer-events-none">
           <div className="tooltip-item absolute" style={{ top: "30%", right: "15%", opacity: 0 }}>
-            <EquipmentTooltip label="Max Speed" position="right" details={[{ spec: "Speed", value: "Mach 1.8" }, { spec: "Supercruise", value: "Mach 1.1" }]} />
+            <EquipmentTooltip label="Max Speed" position="right" accentColor="var(--branch-af)" accentGlow="var(--branch-af-glow)" details={[{ spec: "Speed", value: "Mach 1.8" }, { spec: "Supercruise", value: "Mach 1.1" }]} />
           </div>
           <div className="tooltip-item absolute" style={{ top: "48%", right: "25%", opacity: 0 }}>
-            <EquipmentTooltip label="BVR Missile" position="right" details={[{ spec: "Type", value: "Derby / Astra" }, { spec: "Range", value: "80+ km" }]} />
+            <EquipmentTooltip label="BVR Missile" position="right" accentColor="var(--branch-af)" accentGlow="var(--branch-af-glow)" details={[{ spec: "Type", value: "Derby / Astra" }, { spec: "Range", value: "80+ km" }]} />
           </div>
           <div className="tooltip-item absolute" style={{ top: "55%", right: "8%", opacity: 0 }}>
-            <EquipmentTooltip label="WVR Missile" position="right" details={[{ spec: "Type", value: "Python-5" }, { spec: "Range", value: "20 km" }]} />
+            <EquipmentTooltip label="WVR Missile" position="right" accentColor="var(--branch-af)" accentGlow="var(--branch-af-glow)" details={[{ spec: "Type", value: "Python-5" }, { spec: "Range", value: "20 km" }]} />
           </div>
           <div className="tooltip-item absolute" style={{ top: "65%", right: "30%", opacity: 0 }}>
-            <EquipmentTooltip label="GSh-23 Cannon" position="right" details={[{ spec: "Caliber", value: "23mm" }, { spec: "Rate", value: "3,400 rpm" }]} />
+            <EquipmentTooltip label="GSh-23 Cannon" position="right" accentColor="var(--branch-af)" accentGlow="var(--branch-af-glow)" details={[{ spec: "Caliber", value: "23mm" }, { spec: "Rate", value: "3,400 rpm" }]} />
           </div>
         </div>
 
@@ -749,9 +767,9 @@ export function CinematicSection() {
               <div ref={navyHeadingRef} style={{ opacity: 0 }}>
                 <h2
                   className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-[0.1em] mb-2"
-                  style={{ fontFamily: "var(--font-display)", color: "#c4a35a", textShadow: "0 0 30px rgba(196,163,90,0.4), 0 2px 8px rgba(0,0,0,0.8)" }}
+                  style={{ fontFamily: "var(--font-stencil)", color: "var(--branch-navy)", textShadow: "0 0 30px var(--branch-navy-glow), 0 2px 8px rgba(0,0,0,0.8)" }}
                 >INDIAN<br />NAVY</h2>
-                <div className="gold-divider w-28" />
+                <div className="gold-divider w-28" style={{ "--branch-accent": "var(--branch-navy)", "--branch-accent-glow": "var(--branch-navy-glow)" } as React.CSSProperties} />
               </div>
 
               <div ref={navyDescRef} style={{ opacity: 0 }}>
@@ -761,12 +779,12 @@ export function CinematicSection() {
               </div>
 
               <div ref={navyPanelRef} className="pointer-events-auto" style={{ opacity: 0 }}>
-                <div className="glass-panel p-5 space-y-3 corner-brackets max-w-sm">
+                <div className="glass-panel glass-panel-navy p-5 space-y-3 corner-brackets max-w-sm">
                   <div className="cb-inner">
                     <div className="flex items-center gap-3 mb-1">
-                      <div className="w-1.5 h-4" style={{ backgroundColor: "#c4a35a", boxShadow: "0 0 8px rgba(196,163,90,0.5)" }} />
+                      <div className="w-1.5 h-4" style={{ backgroundColor: "var(--branch-navy)", boxShadow: "0 0 8px var(--branch-navy-glow)" }} />
                       <div>
-                        <h3 className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ fontFamily: "var(--font-heading)", color: "#c4a35a" }}>INS Vikrant (IAC-1)</h3>
+                        <h3 className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ fontFamily: "var(--font-heading)", color: "var(--branch-navy)" }}>INS Vikrant (IAC-1)</h3>
                         <p className="mono-readout text-[var(--color-text-muted)] text-[0.65rem] mt-0.5">India&apos;s First Indigenous Aircraft Carrier</p>
                       </div>
                     </div>
@@ -793,18 +811,22 @@ export function CinematicSection() {
         {/* Navy tooltips */}
         <div ref={navyTooltipAreaRef} className="absolute inset-0 z-[7] pointer-events-none">
           <div className="tooltip-item absolute" style={{ top: "55%", right: "15%", opacity: 0 }}>
-            <EquipmentTooltip label="Displacement" position="right" details={[{ spec: "Full Load", value: "45,000 tonnes" }, { spec: "Length", value: "262 meters" }, { spec: "Beam", value: "62 meters" }]} />
+            <EquipmentTooltip label="Displacement" position="right" accentColor="var(--branch-navy)" accentGlow="var(--branch-navy-glow)" details={[{ spec: "Full Load", value: "45,000 tonnes" }, { spec: "Length", value: "262 meters" }, { spec: "Beam", value: "62 meters" }]} />
           </div>
           <div className="tooltip-item absolute" style={{ top: "30%", right: "20%", opacity: 0 }}>
-            <EquipmentTooltip label="Air Wing" position="right" details={[{ spec: "Capacity", value: "30+ Aircraft" }, { spec: "Fighter", value: "MiG-29K" }, { spec: "Helo", value: "Ka-31 / MH-60R" }]} />
+            <EquipmentTooltip label="Air Wing" position="right" accentColor="var(--branch-navy)" accentGlow="var(--branch-navy-glow)" details={[{ spec: "Capacity", value: "30+ Aircraft" }, { spec: "Fighter", value: "MiG-29K" }, { spec: "Helo", value: "Ka-31 / MH-60R" }]} />
           </div>
           <div className="tooltip-item absolute" style={{ top: "25%", right: "35%", opacity: 0 }}>
-            <EquipmentTooltip label="Defense Systems" position="right" details={[{ spec: "SAM", value: "Barak-8" }, { spec: "Range", value: "70+ km" }]} />
+            <EquipmentTooltip label="Defense Systems" position="right" accentColor="var(--branch-navy)" accentGlow="var(--branch-navy-glow)" details={[{ spec: "SAM", value: "Barak-8" }, { spec: "Range", value: "70+ km" }]} />
           </div>
           <div className="tooltip-item absolute" style={{ top: "45%", right: "10%", opacity: 0 }}>
-            <EquipmentTooltip label="CIWS" position="right" details={[{ spec: "System", value: "AK-630" }, { spec: "Caliber", value: "30mm" }, { spec: "Rate", value: "5,000 rpm" }]} />
+            <EquipmentTooltip label="CIWS" position="right" accentColor="var(--branch-navy)" accentGlow="var(--branch-navy-glow)" details={[{ spec: "System", value: "AK-630" }, { spec: "Caliber", value: "30mm" }, { spec: "Rate", value: "5,000 rpm" }]} />
           </div>
         </div>
+
+        {/* ── Atmospheric overlays ── */}
+        <div className="scan-overlay" />
+        <div className="vignette-overlay" />
 
 
         {/* ── Hero text overlay ── */}

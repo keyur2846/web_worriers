@@ -31,9 +31,7 @@ export function LandingPage() {
   const setGlobalProgress = useScrollStore((s) => s.setGlobalProgress);
   const isLoaded = usePreloadStore((s) => s.isLoaded);
   const containerRef = useRef<HTMLElement>(null);
-  const [showLoader, setShowLoader] = useState(
-    () => sessionStorage.getItem("mi-assets-loaded") !== "1",
-  );
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     setScenes(SCENE_CONFIGS);
