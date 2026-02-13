@@ -10,6 +10,8 @@ interface EquipmentTooltipProps {
   label: string;
   details: EquipmentSpec[];
   position?: "left" | "right";
+  /** Length of the dashed leader line in px (default 24) */
+  connectorWidth?: number;
 }
 
 /**
@@ -20,6 +22,7 @@ export function EquipmentTooltip({
   label,
   details,
   position = "right",
+  connectorWidth = 24,
 }: EquipmentTooltipProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -73,13 +76,16 @@ export function EquipmentTooltip({
         />
       </div>
 
-      {/* Leader line */}
+      {/* Dashed leader line */}
       <div
-        className="h-px w-6 shrink-0"
+        className="h-px shrink-0"
         style={{
-          background: isRight
-            ? "linear-gradient(to right, var(--color-accent, #c4a35a), transparent)"
-            : "linear-gradient(to left, var(--color-accent, #c4a35a), transparent)",
+          width: `${connectorWidth}px`,
+          backgroundImage: isRight
+            ? "linear-gradient(to right, rgba(196,163,90,0.8) 60%, transparent 60%)"
+            : "linear-gradient(to left, rgba(196,163,90,0.8) 60%, transparent 60%)",
+          backgroundSize: "8px 1px",
+          backgroundRepeat: "repeat-x",
         }}
       />
 

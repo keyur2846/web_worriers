@@ -3,24 +3,31 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useScrollStore, type SceneConfig } from "@/stores/scroll-store";
-import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { HUDOverlay } from "@/components/hud/hud-overlay";
 import { CinematicEffects } from "@/components/hud/cinematic-effects";
 import { Navbar } from "@/components/layout/navbar";
 import { HeroSection } from "@/components/sections/hero-section";
-import { SoldierSection } from "@/components/sections/soldier-section";
-import { AirforceSection } from "@/components/sections/airforce-section";
-import { VikrantSection } from "@/components/sections/vikrant-section";
+import { CinematicSection } from "@/components/sections/cinematic-section";
 import { MissionSelectSection } from "@/components/sections/mission-select-section";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Scene progress ranges derived from section heights:
+ *  Hero 100vh | Cinematic 1880vh | Mission 100vh
+ *  Total ≈ 2080vh — each range is proportional.
+ *
+ *  Cinematic sub-ranges (within the 1880vh):
+ *    Army zone:  350+100+30+100 = 580vh
+ *    AF zone:    500+100+30     = 630vh
+ *    Navy zone:  500+100+70     = 670vh
+ */
 const SCENE_CONFIGS: SceneConfig[] = [
-  { id: "hero", label: "Hero", startProgress: 0, endProgress: 0.2 },
-  { id: "indian-army", label: "Indian Army", startProgress: 0.2, endProgress: 0.4 },
-  { id: "indian-airforce", label: "Indian Air Force", startProgress: 0.4, endProgress: 0.6 },
-  { id: "indian-navy", label: "Indian Navy", startProgress: 0.6, endProgress: 0.8 },
-  { id: "mission-select", label: "Mission Selection", startProgress: 0.8, endProgress: 1.0 },
+  { id: "hero", label: "Hero", startProgress: 0, endProgress: 0.05 },
+  { id: "indian-army", label: "Indian Army", startProgress: 0.05, endProgress: 0.33 },
+  { id: "indian-airforce", label: "Indian Air Force", startProgress: 0.33, endProgress: 0.63 },
+  { id: "indian-navy", label: "Indian Navy", startProgress: 0.63, endProgress: 0.95 },
+  { id: "mission-select", label: "Mission Selection", startProgress: 0.95, endProgress: 1.0 },
 ];
 
 export function LandingPage() {
@@ -55,19 +62,13 @@ export function LandingPage() {
       <Navbar />
       <main ref={containerRef} id="parallax-container">
         <HeroSection />
-        <SoldierSection />
-        <AirforceSection />
-        <VikrantSection />
+        <CinematicSection />
         <MissionSelectSection />
       </main>
 
       {/* Fixed overlays */}
       <CinematicEffects />
       <HUDOverlay />
-
-      <div className="fixed top-4 right-4 z-50">
-        <ThemeSwitcher />
-      </div>
     </>
   );
 }

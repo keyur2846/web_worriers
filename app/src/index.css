@@ -801,6 +801,21 @@ select:focus {
   filter: blur(22px);
 }
 
+/* ── Frame canvas container — theme-aware filters for blend mode sections ── */
+.frame-canvas-container {
+  --base-filter: none;
+  filter: var(--base-filter);
+  transition: filter 0.4s ease;
+}
+
+[data-theme="night-ops"] .frame-canvas-container {
+  --base-filter: saturate(0.85) brightness(0.85) contrast(1.05);
+}
+
+[data-theme="tactical"] .frame-canvas-container {
+  --base-filter: contrast(1.2) saturate(0.6) brightness(0.9);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════════════════════════════════════ */
