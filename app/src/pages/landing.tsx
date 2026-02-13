@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useScrollStore, type SceneConfig } from "@/stores/scroll-store";
+import { usePreloadStore } from "@/stores/preload-store";
+import { AssetLoader } from "@/components/ui/asset-loader";
 import { HUDOverlay } from "@/components/hud/hud-overlay";
 import { CinematicEffects } from "@/components/hud/cinematic-effects";
 import { Navbar } from "@/components/layout/navbar";
@@ -27,11 +29,31 @@ const SCENE_CONFIGS: SceneConfig[] = [
 export function LandingPage() {
   const setScenes = useScrollStore((s) => s.setScenes);
   const setGlobalProgress = useScrollStore((s) => s.setGlobalProgress);
+  const isLoaded = usePreloadStore((s) => s.isLoaded);
   const containerRef = useRef<HTMLElement>(null);
+  const [showLoader, setShowLoader] = useState(
+    () => sessionStorage.getItem("mi-assets-loaded") !== "1",
+  );
 
   useEffect(() => {
     setScenes(SCENE_CONFIGS);
   }, [setScenes]);
+
+  /* Lock scroll during loading */
+  useEffect(() => {
+    if (!isLoaded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isLoaded]);
+
+  const handleLoadComplete = useCallback(() => {
+    setShowLoader(false);
+  }, []);
 
   /* Master ScrollTrigger tracking overall page progress */
   useGSAP(
@@ -53,6 +75,7 @@ export function LandingPage() {
 
   return (
     <>
+      {showLoader && <AssetLoader onComplete={handleLoadComplete} />}
       <Navbar />
       <main ref={containerRef} id="parallax-container">
         <CinematicSection />

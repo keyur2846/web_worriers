@@ -1,4 +1,5 @@
 import { useRef, useCallback, useState, useEffect } from "react";
+import { getPreloadedFrames, usePreloadStore } from "@/stores/preload-store";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -55,16 +56,7 @@ const B = computeBounds();
    Helpers
    ═══════════════════════════════════════════════════════════════════ */
 
-const pad3 = (n: number) => String(n).padStart(3, "0");
 
-const R2_BASE = "https://pub-8f1a35b88d584fcbbaf75e78ba08ee58.r2.dev";
-
-function getFrameSrc(index: number): string {
-  if (index < 120) return `${R2_BASE}/web/army-saluting/frame-${pad3(index + 1)}.webp`;
-  if (index < 160) return `${R2_BASE}/web/army-eyezoom/frame-${pad3(index - 119)}.webp`;
-  if (index < 400) return `${R2_BASE}/web/jet-transition/frame-${pad3(index - 159)}.webp`;
-  return `${R2_BASE}/web/carrier-reveal/frame-${pad3(index - 399)}.webp`;
-}
 
 function progressToFrame(p: number): number {
   const lerp = (a: number, b: number, t: number) => a + (b - a) * Math.max(0, Math.min(1, t));
@@ -140,9 +132,8 @@ export function CinematicSection() {
   // Canvas
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasWrapRef = useRef<HTMLDivElement>(null);
-  const framesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
   const currentFrameRef = useRef(0);
-  const loadedBatchRef = useRef(0);
+  const isLoaded = usePreloadStore((s) => s.isLoaded);
 
   // Hero layers
   const flagVideoRef = useRef<HTMLDivElement>(null);
@@ -189,12 +180,13 @@ export function CinematicSection() {
 
   /* ── Canvas drawing (supports optional crossfade between two frames) ── */
   const resolveImg = useCallback((index: number): HTMLImageElement | null => {
-    let img = framesRef.current[index];
+    const frames = getPreloadedFrames();
+    const img = frames[index];
     if (img?.complete && img.naturalWidth > 0) return img;
     for (let spread = 1; spread < TOTAL_FRAMES; spread++) {
-      const before = framesRef.current[index - spread];
+      const before = frames[index - spread];
       if (before?.complete && before.naturalWidth > 0) return before;
-      const after = framesRef.current[index + spread];
+      const after = frames[index + spread];
       if (after?.complete && after.naturalWidth > 0) return after;
     }
     return null;
@@ -267,25 +259,12 @@ export function CinematicSection() {
     }
   }, [resolveImg, ensureCanvasSize, coverFill]);
 
-  /* ── Frame preloading (batched for memory) ── */
-  const loadBatch = useCallback((start: number, end: number) => {
-    for (let i = start; i <= end; i++) {
-      if (framesRef.current[i]) continue;
-      const img = new Image();
-      img.src = getFrameSrc(i);
-      const idx = i;
-      img.onload = () => {
-        if (idx === 0) drawFrame(0);
-        else if (idx === currentFrameRef.current) drawFrame(idx);
-      };
-      framesRef.current[i] = img;
-    }
-  }, [drawFrame]);
-
+  /* ── Draw first frame once preloaded frames arrive ── */
   useEffect(() => {
-    loadBatch(0, 159); // army salute + eyezoom on mount
-    loadedBatchRef.current = 1;
-  }, [loadBatch]);
+    if (isLoaded) {
+      drawFrame(0);
+    }
+  }, [isLoaded, drawFrame]);
 
   /* ── Anchor computation for army SVG lines ── */
   useEffect(() => {
@@ -351,15 +330,7 @@ export function CinematicSection() {
             }
           }
 
-          // Lazy-load next batches ahead of time
-          if (loadedBatchRef.current < 2 && p > 0.15) {
-            loadBatch(160, 399);
-            loadedBatchRef.current = 2;
-          }
-          if (loadedBatchRef.current < 3 && p > 0.50) {
-            loadBatch(400, 639);
-            loadedBatchRef.current = 3;
-          }
+
 
           /* ── 2. Hero layers (flag video + text fade out) ── */
           {

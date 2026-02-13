@@ -247,7 +247,9 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
     position: relative;
   }
 
@@ -296,7 +298,12 @@
   }
 
   /* Headings */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -346,7 +353,8 @@
 .navbar-glass:hover {
   background: color-mix(in oklab, var(--color-surface) 60%, transparent);
   backdrop-filter: blur(20px) saturate(1.3);
-  border-bottom: 1px solid color-mix(in oklab, var(--color-border) 30%, transparent);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--color-border) 30%, transparent);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 }
 
@@ -356,7 +364,9 @@
   background: color-mix(in oklab, var(--color-surface) 60%, transparent);
   backdrop-filter: blur(16px) saturate(1.2);
   border: 1px solid color-mix(in oklab, var(--color-border) 40%, transparent);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ── Corner bracket decorations ── */
@@ -424,7 +434,9 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   line-height: 1.05;
-  text-shadow: 0 0 40px rgba(196,163,90,0.3), 0 2px 4px rgba(0,0,0,0.5);
+  text-shadow:
+    0 0 40px rgba(196, 163, 90, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 @utility display-section {
@@ -433,13 +445,15 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   line-height: 1.1;
-  text-shadow: 0 0 30px rgba(196,163,90,0.4), 0 0 60px rgba(196,163,90,0.15);
+  text-shadow:
+    0 0 30px rgba(196, 163, 90, 0.4),
+    0 0 60px rgba(196, 163, 90, 0.15);
 }
 
 /* ── Gold accent text (used across many sections) ── */
 @utility text-gold {
   color: #c4a35a;
-  text-shadow: 0 0 12px rgba(196,163,90,0.4);
+  text-shadow: 0 0 12px rgba(196, 163, 90, 0.4);
 }
 
 @utility text-cream {
@@ -462,14 +476,16 @@
 
 @utility hud-border {
   border: 1px solid var(--color-primary);
-  box-shadow: 0 0 8px color-mix(in oklab, var(--color-primary) 25%, transparent),
-              inset 0 0 8px color-mix(in oklab, var(--color-primary) 10%, transparent);
+  box-shadow:
+    0 0 8px color-mix(in oklab, var(--color-primary) 25%, transparent),
+    inset 0 0 8px color-mix(in oklab, var(--color-primary) 10%, transparent);
 }
 
 @utility tactical-glow {
-  text-shadow: 0 0 8px color-mix(in oklab, var(--color-primary) 60%, transparent),
-               0 0 20px color-mix(in oklab, var(--color-primary) 30%, transparent),
-               0 0 40px color-mix(in oklab, var(--color-primary) 15%, transparent);
+  text-shadow:
+    0 0 8px color-mix(in oklab, var(--color-primary) 60%, transparent),
+    0 0 20px color-mix(in oklab, var(--color-primary) 30%, transparent),
+    0 0 40px color-mix(in oklab, var(--color-primary) 15%, transparent);
 }
 
 @utility scene-container {
@@ -488,7 +504,14 @@
   padding: 0.625rem 1.5rem;
   background: var(--color-primary);
   color: var(--color-text-inverse);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  clip-path: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
   transition: all 0.2s ease;
 }
 
@@ -513,7 +536,8 @@
   background: radial-gradient(
     ellipse at center,
     transparent 50%,
-    color-mix(in oklab, var(--color-bg) var(--vignette-opacity), transparent) 100%
+    color-mix(in oklab, var(--color-bg) var(--vignette-opacity), transparent)
+      100%
   );
 }
 
@@ -558,7 +582,9 @@
   border-style: solid;
   opacity: 0.7;
   z-index: 1;
-  filter: drop-shadow(0 0 3px color-mix(in oklab, var(--color-accent) 50%, transparent));
+  filter: drop-shadow(
+    0 0 3px color-mix(in oklab, var(--color-accent) 50%, transparent)
+  );
 }
 
 .corner-brackets::before {
@@ -600,14 +626,16 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 30%, transparent);
+  box-shadow: 0 0 0 1px
+    color-mix(in oklab, var(--color-primary) 30%, transparent);
 }
 
 /* Tactical mode glow on focused inputs */
 [data-theme="tactical"] input:focus,
 [data-theme="tactical"] textarea:focus {
-  box-shadow: 0 0 6px color-mix(in oklab, var(--color-primary) 40%, transparent),
-              0 0 0 1px var(--color-primary);
+  box-shadow:
+    0 0 6px color-mix(in oklab, var(--color-primary) 40%, transparent),
+    0 0 0 1px var(--color-primary);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -615,22 +643,44 @@ select:focus {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes scan-line {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
 }
 
 @keyframes flicker {
-  0%, 100% { opacity: 1; }
-  92% { opacity: 1; }
-  93% { opacity: 0.8; }
-  94% { opacity: 1; }
-  96% { opacity: 0.9; }
-  97% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  94% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.9;
+  }
+  97% {
+    opacity: 1;
+  }
 }
 
 /* Tactical text flicker */
@@ -643,91 +693,197 @@ select:focus {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @keyframes filmGrain {
-  0% { transform: translate(0, 0); }
-  33% { transform: translate(-2px, 1px); }
-  66% { transform: translate(1px, -2px); }
-  100% { transform: translate(2px, 2px); }
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-2px, 1px);
+  }
+  66% {
+    transform: translate(1px, -2px);
+  }
+  100% {
+    transform: translate(2px, 2px);
+  }
 }
 
 @keyframes dust-float {
-  0% { transform: translateY(0) translateX(0); opacity: 0; }
-  15% { opacity: 0.7; }
-  85% { opacity: 0.7; }
-  100% { transform: translateY(-60px) translateX(25px); opacity: 0; }
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-60px) translateX(25px);
+    opacity: 0;
+  }
 }
 
 @keyframes dust-float-golden {
-  0% { transform: translateY(0) translateX(0); opacity: 0.3; }
-  50% { opacity: 0.8; }
-  100% { transform: translateY(-30px) translateX(10px); opacity: 0.2; }
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-30px) translateX(10px);
+    opacity: 0.2;
+  }
 }
 
 @keyframes heat-shimmer {
-  0%, 100% { transform: scaleY(1) translateY(0); }
-  25% { transform: scaleY(1.002) translateY(-1px); }
-  50% { transform: scaleY(0.998) translateY(1px); }
-  75% { transform: scaleY(1.001) translateY(-0.5px); }
+  0%,
+  100% {
+    transform: scaleY(1) translateY(0);
+  }
+  25% {
+    transform: scaleY(1.002) translateY(-1px);
+  }
+  50% {
+    transform: scaleY(0.998) translateY(1px);
+  }
+  75% {
+    transform: scaleY(1.001) translateY(-0.5px);
+  }
 }
 
 @keyframes carrier-shake {
-  0%, 100% { transform: translate(0, 0) rotate(0); }
-  10% { transform: translate(-3px, 2px) rotate(-0.3deg); }
-  20% { transform: translate(2px, -2px) rotate(0.2deg); }
-  30% { transform: translate(-1px, 3px) rotate(-0.1deg); }
-  40% { transform: translate(3px, -1px) rotate(0.3deg); }
-  50% { transform: translate(-2px, 1px) rotate(-0.2deg); }
-  60% { transform: translate(1px, -3px) rotate(0.1deg); }
-  70% { transform: translate(-3px, 2px) rotate(-0.3deg); }
-  80% { transform: translate(2px, -2px) rotate(0.2deg); }
-  90% { transform: translate(-1px, 1px) rotate(-0.1deg); }
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  10% {
+    transform: translate(-3px, 2px) rotate(-0.3deg);
+  }
+  20% {
+    transform: translate(2px, -2px) rotate(0.2deg);
+  }
+  30% {
+    transform: translate(-1px, 3px) rotate(-0.1deg);
+  }
+  40% {
+    transform: translate(3px, -1px) rotate(0.3deg);
+  }
+  50% {
+    transform: translate(-2px, 1px) rotate(-0.2deg);
+  }
+  60% {
+    transform: translate(1px, -3px) rotate(0.1deg);
+  }
+  70% {
+    transform: translate(-3px, 2px) rotate(-0.3deg);
+  }
+  80% {
+    transform: translate(2px, -2px) rotate(0.2deg);
+  }
+  90% {
+    transform: translate(-1px, 1px) rotate(-0.1deg);
+  }
 }
 
 @keyframes scope-breathe {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(0.3px, 0.5px) scale(1.002); }
-  50% { transform: translate(-0.2px, -0.3px) scale(0.998); }
-  75% { transform: translate(0.1px, 0.2px) scale(1.001); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(0.3px, 0.5px) scale(1.002);
+  }
+  50% {
+    transform: translate(-0.2px, -0.3px) scale(0.998);
+  }
+  75% {
+    transform: translate(0.1px, 0.2px) scale(1.001);
+  }
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes star-twinkle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 @keyframes chakra-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes god-ray-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes seabird-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes debris-float {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-  50% { opacity: 0.6; }
-  100% { transform: translateY(-30px) rotate(180deg); opacity: 0; }
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-30px) rotate(180deg);
+    opacity: 0;
+  }
 }
 
 @keyframes approach-blink {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.5); }
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
 }
 
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* ── Scene image theme filters ── */
@@ -844,11 +1000,122 @@ select:focus {
   .glow-pulse,
   .approach-light-blink,
   .star-field::before,
-  .star-field::after {
+  .star-field::after,
+  .chakra-spin {
     animation: none !important;
   }
 
   .scene-image {
     transition: none !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOADING OVERLAY — Ashoka Chakra Image
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes chakra-slow-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.05); }
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.chakra-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
+/* Radial glow behind the chakra */
+.chakra-glow-bg {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 100, 255, 0.5) 0%, transparent 70%);
+  animation: glow-breathe 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Image wrapper for layering dim + bright */
+.chakra-img-wrapper {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  z-index: 1;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.chakra-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(3.2);
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Dim base — always visible, very low opacity */
+.chakra-img-dim {
+  opacity: 0.15;
+  filter: brightness(0.5);
+}
+
+/* Bright reveal layer — masked by conic gradient from component */
+.chakra-img-bright {
+  opacity: 1;
+  filter: brightness(1.2) drop-shadow(0 0 12px rgba(30, 100, 255, 0.6));
+}
+
+/* Slow continuous spin */
+.chakra-spin {
+  animation: chakra-slow-spin 10s linear infinite;
+}
+
+/* Text below the chakra */
+.chakra-loader-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 1;
+}
+
+.chakra-loader-pct {
+  font-family: 'Inter', 'SF Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(120, 170, 255, 0.95);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 16px rgba(30, 100, 255, 0.4);
+}
+
+.chakra-loader-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(150, 180, 230, 0.6);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
 }
