@@ -24,7 +24,8 @@ const Z = {
   armyDwell: 100,
   armyFade: 30,
   eyeZoom: 100,
-  jet: 500,
+  eyeToJet: 50,
+  jet: 450,
   afDwell: 100,
   afFade: 30,
   carrier: 500,
@@ -54,11 +55,13 @@ const B = computeBounds();
 
 const pad3 = (n: number) => String(n).padStart(3, "0");
 
+const R2_BASE = "https://pub-8f1a35b88d584fcbbaf75e78ba08ee58.r2.dev";
+
 function getFrameSrc(index: number): string {
-  if (index < 120) return `/images/army-saluting/frame-${pad3(index + 1)}.png`;
-  if (index < 160) return `/images/army-eyezoom/frame-${pad3(index - 119)}.png`;
-  if (index < 400) return `/images/jet-transition/frame-${pad3(index - 159)}.jpg`;
-  return `/images/carrier-reveal/frame-${pad3(index - 399)}.jpg`;
+  if (index < 120) return `${R2_BASE}/army-saluting/frame-${pad3(index + 1)}.png`;
+  if (index < 160) return `${R2_BASE}/army-eyezoom/frame-${pad3(index - 119)}.png`;
+  if (index < 400) return `${R2_BASE}/jet-transition/frame-${pad3(index - 159)}.jpg`;
+  return `${R2_BASE}/carrier-reveal/frame-${pad3(index - 399)}.jpg`;
 }
 
 function progressToFrame(p: number): number {
@@ -68,6 +71,7 @@ function progressToFrame(p: number): number {
   if (p <= B.armySalute.e) return Math.round(lerp(0, 119, local(B.armySalute.s, B.armySalute.e)));
   if (p <= B.armyFade.e) return 119;
   if (p <= B.eyeZoom.e) return Math.round(lerp(120, 159, local(B.eyeZoom.s, B.eyeZoom.e)));
+  if (p <= B.eyeToJet.e) return 159; // frozen during crossfade
   if (p <= B.jet.e) return Math.round(lerp(160, 399, local(B.jet.s, B.jet.e)));
   if (p <= B.afFade.e) return 399;
   if (p <= B.carrier.e) return Math.round(lerp(400, 639, local(B.carrier.s, B.carrier.e)));
@@ -170,52 +174,43 @@ export function CinematicSection() {
   const navyPanelRef = useRef<HTMLDivElement>(null);
   const navyTooltipAreaRef = useRef<HTMLDivElement>(null);
 
-  // Eye-zoom caption
-  const captionRef = useRef<HTMLDivElement>(null);
 
   // Anchor positions for army SVG lines
   const [anchors, setAnchors] = useState(
     BODY_ANCHORS.map(() => ({ left: 70, top: 30 })),
   );
 
-  /* ── Canvas drawing (inlined from ScrollFrameCanvas) ── */
-  const drawFrame = useCallback((index: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
+  /* ── Canvas drawing (supports optional crossfade between two frames) ── */
+  const resolveImg = useCallback((index: number): HTMLImageElement | null => {
     let img = framesRef.current[index];
-    if (!img || !img.complete || img.naturalWidth === 0) {
-      for (let spread = 1; spread < TOTAL_FRAMES; spread++) {
-        const before = framesRef.current[index - spread];
-        if (before?.complete && before.naturalWidth > 0) { img = before; break; }
-        const after = framesRef.current[index + spread];
-        if (after?.complete && after.naturalWidth > 0) { img = after; break; }
-      }
-      if (!img || !img.complete || img.naturalWidth === 0) return;
+    if (img?.complete && img.naturalWidth > 0) return img;
+    for (let spread = 1; spread < TOTAL_FRAMES; spread++) {
+      const before = framesRef.current[index - spread];
+      if (before?.complete && before.naturalWidth > 0) return before;
+      const after = framesRef.current[index + spread];
+      if (after?.complete && after.naturalWidth > 0) return after;
     }
+    return null;
+  }, []);
 
+  const ensureCanvasSize = useCallback((canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
     const container = viewportRef.current;
-    if (container) {
-      const dpr = window.devicePixelRatio || 1;
-      const layoutW = container.offsetWidth;
-      const layoutH = container.offsetHeight;
-      const targetW = Math.round(layoutW * dpr);
-      const targetH = Math.round(layoutH * dpr);
-      if (canvas.width !== targetW || canvas.height !== targetH) {
-        canvas.width = targetW;
-        canvas.height = targetH;
-        canvas.style.width = `${layoutW}px`;
-        canvas.style.height = `${layoutH}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
+    if (!container) return;
+    const dpr = window.devicePixelRatio || 1;
+    const layoutW = container.offsetWidth;
+    const layoutH = container.offsetHeight;
+    const targetW = Math.round(layoutW * dpr);
+    const targetH = Math.round(layoutH * dpr);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+      canvas.style.width = `${layoutW}px`;
+      canvas.style.height = `${layoutH}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
+  }, []);
 
-    const cw = canvas.width / (window.devicePixelRatio || 1);
-    const ch = canvas.height / (window.devicePixelRatio || 1);
-    ctx.clearRect(0, 0, cw, ch);
-
+  const coverFill = useCallback((ctx: CanvasRenderingContext2D, img: HTMLImageElement, cw: number, ch: number) => {
     const imgAspect = img.naturalWidth / img.naturalHeight;
     const canvasAspect = cw / ch;
     let drawW: number, drawH: number, drawX: number, drawY: number;
@@ -228,6 +223,42 @@ export function CinematicSection() {
     }
     ctx.drawImage(img, drawX, drawY, drawW, drawH);
   }, []);
+
+  const drawFrame = useCallback((index: number, crossfade?: { inIndex: number; t: number }) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ensureCanvasSize(canvas, ctx);
+    const cw = canvas.width / (window.devicePixelRatio || 1);
+    const ch = canvas.height / (window.devicePixelRatio || 1);
+    ctx.clearRect(0, 0, cw, ch);
+
+    if (crossfade) {
+      const { inIndex, t } = crossfade;
+      // Smoothstep easing for natural-feeling dissolve
+      const eased = t * t * (3 - 2 * t);
+      // Subtle brightness dip at midpoint — "passing through darkness"
+      const envelope = 1 - 0.15 * Math.sin(eased * Math.PI);
+
+      const outImg = resolveImg(index);
+      const inImg = resolveImg(inIndex);
+      if (outImg) {
+        ctx.globalAlpha = (1 - eased) * envelope;
+        coverFill(ctx, outImg, cw, ch);
+      }
+      if (inImg) {
+        ctx.globalAlpha = eased * envelope;
+        coverFill(ctx, inImg, cw, ch);
+      }
+      ctx.globalAlpha = 1;
+    } else {
+      const img = resolveImg(index);
+      if (!img) return;
+      coverFill(ctx, img, cw, ch);
+    }
+  }, [resolveImg, ensureCanvasSize, coverFill]);
 
   /* ── Frame preloading (batched for memory) ── */
   const loadBatch = useCallback((start: number, end: number) => {
@@ -284,7 +315,6 @@ export function CinematicSection() {
       if (svgDots) gsap.set(svgDots, { opacity: 0 });
       if (svgLines) gsap.set(svgLines, { attr: { "stroke-dashoffset": 1 } });
       if (darkBgRef.current) gsap.set(darkBgRef.current, { opacity: 0 });
-      if (captionRef.current) gsap.set(captionRef.current, { opacity: 0, scale: 0.97 });
       if (leftGradRef.current) gsap.set(leftGradRef.current, { opacity: 0 });
       if (bottomGradRef.current) gsap.set(bottomGradRef.current, { opacity: 0 });
 
@@ -296,11 +326,18 @@ export function CinematicSection() {
         onUpdate: (self) => {
           const p = self.progress;
 
-          /* ── 1. Frame drawing ── */
-          const frameIndex = progressToFrame(p);
-          if (frameIndex !== currentFrameRef.current) {
-            currentFrameRef.current = frameIndex;
-            drawFrame(frameIndex);
+          /* ── 1. Frame drawing (with eye→jet crossfade) ── */
+          const inCrossfade = p >= B.eyeToJet.s && p <= B.eyeToJet.e;
+          if (inCrossfade) {
+            const t = ramp(p, B.eyeToJet.s, B.eyeToJet.e);
+            drawFrame(159, { inIndex: 160, t });
+            currentFrameRef.current = -1; // force redraw when exiting crossfade
+          } else {
+            const frameIndex = progressToFrame(p);
+            if (frameIndex !== currentFrameRef.current) {
+              currentFrameRef.current = frameIndex;
+              drawFrame(frameIndex);
+            }
           }
 
           // Lazy-load next batches ahead of time
@@ -419,12 +456,7 @@ export function CinematicSection() {
             }
           }
 
-          /* ── 8. Eye-zoom caption ── */
-          if (captionRef.current) {
-            const ci = ramp(p, B.eyeZoom.s + 0.02, B.eyeZoom.s + 0.04);
-            const co = ramp(p, B.eyeZoom.e - 0.02, B.eyeZoom.e);
-            gsap.set(captionRef.current, { opacity: ci * (1 - co), scale: 0.97 + 0.03 * ci });
-          }
+
         },
       });
     },
@@ -756,17 +788,6 @@ export function CinematicSection() {
           </div>
         </div>
 
-        {/* ── Eye-zoom caption ── */}
-        <div className="absolute inset-0 z-[8] flex items-center justify-center pointer-events-none">
-          <div ref={captionRef} className="text-center" style={{ opacity: 0 }}>
-            <p
-              className="text-xs md:text-sm tracking-[0.3em] uppercase"
-              style={{ fontFamily: "var(--font-mono)", color: "#c4a35a", textShadow: "0 0 20px rgba(196,163,90,0.6), 0 2px 8px rgba(0,0,0,0.8)" }}
-            >
-              Through the Eyes of a Warrior
-            </p>
-          </div>
-        </div>
 
         {/* ── Dust particles (army atmosphere) ── */}
         <div ref={dustRef} className="absolute inset-0 z-[9] pointer-events-none">
