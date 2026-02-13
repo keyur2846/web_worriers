@@ -336,6 +336,20 @@
    CUSTOM UTILITIES
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ── Navbar — transparent by default, translucent on hover ── */
+.navbar-glass {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+}
+.navbar-glass:hover {
+  background: color-mix(in oklab, var(--color-surface) 60%, transparent);
+  backdrop-filter: blur(20px) saturate(1.3);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-border) 30%, transparent);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
 /* ── Glass Panel with corner brackets ── */
 @utility glass-panel {
   position: relative;

@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/stores/auth-store";
-import { useScrollStore } from "@/stores/scroll-store";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 
 const NAV_LINKS = [
@@ -15,19 +14,6 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const navRef = useRef<HTMLElement>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  // Subscribe to scroll store with threshold to avoid re-renders on every tick
-  useEffect(() => {
-    const unsub = useScrollStore.subscribe((state) => {
-      const scrolled = state.globalProgress > 0.02;
-      setIsScrolled((prev) => {
-        if (prev !== scrolled) return scrolled;
-        return prev;
-      });
-    });
-    return unsub;
-  }, []);
 
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-40">
@@ -40,22 +26,7 @@ export function Navbar() {
       />
 
       <div
-        className="transition-all duration-300 ease-out"
-        style={
-          isScrolled
-            ? {
-                background: "color-mix(in oklab, var(--color-surface) 70%, transparent)",
-                backdropFilter: "blur(20px) saturate(1.3)",
-                borderBottom: "1px solid color-mix(in oklab, var(--color-border) 40%, transparent)",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
-              }
-            : {
-                background: "linear-gradient(to bottom, rgba(0,0,0,0.3), transparent)",
-                backdropFilter: "blur(4px)",
-                borderBottom: "1px solid transparent",
-                boxShadow: "none",
-              }
-        }
+        className="transition-all duration-300 ease-out navbar-glass"
       >
         <div className="max-w-6xl mx-auto px-6 py-2.5 flex items-center justify-between">
           {/* Logo */}

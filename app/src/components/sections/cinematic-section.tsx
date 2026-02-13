@@ -14,13 +14,15 @@ gsap.registerPlugin(ScrollTrigger);
    ═══════════════════════════════════════════════════════════════════ */
 
 const TOTAL_FRAMES = 640;
-const IMG_W = 2560;
-const IMG_H = 1360;
+const IMG_W = 1280;
+const IMG_H = 720;
 const SOLDIER_SHIFT_X = 20;
 
 /** Zone heights in vh — defines scroll budget per zone */
 const Z = {
-  armySalute: 350,
+  heroIntro: 100,
+  heroFade: 50,
+  armySalute: 300,
   armyDwell: 100,
   armyFade: 30,
   eyeZoom: 100,
@@ -33,7 +35,7 @@ const Z = {
   navyFade: 70,
 } as const;
 
-const TOTAL_VH = Object.values(Z).reduce((s, v) => s + v, 0); // 1880
+const TOTAL_VH = Object.values(Z).reduce((s, v) => s + v, 0); // 1980
 
 /** Pre-computed progress boundaries for each zone */
 function computeBounds() {
@@ -58,16 +60,17 @@ const pad3 = (n: number) => String(n).padStart(3, "0");
 const R2_BASE = "https://pub-8f1a35b88d584fcbbaf75e78ba08ee58.r2.dev";
 
 function getFrameSrc(index: number): string {
-  if (index < 120) return `${R2_BASE}/army-saluting/frame-${pad3(index + 1)}.png`;
-  if (index < 160) return `${R2_BASE}/army-eyezoom/frame-${pad3(index - 119)}.png`;
-  if (index < 400) return `${R2_BASE}/jet-transition/frame-${pad3(index - 159)}.jpg`;
-  return `${R2_BASE}/carrier-reveal/frame-${pad3(index - 399)}.jpg`;
+  if (index < 120) return `${R2_BASE}/web/army-saluting/frame-${pad3(index + 1)}.webp`;
+  if (index < 160) return `${R2_BASE}/web/army-eyezoom/frame-${pad3(index - 119)}.webp`;
+  if (index < 400) return `${R2_BASE}/web/jet-transition/frame-${pad3(index - 159)}.webp`;
+  return `${R2_BASE}/web/carrier-reveal/frame-${pad3(index - 399)}.webp`;
 }
 
 function progressToFrame(p: number): number {
   const lerp = (a: number, b: number, t: number) => a + (b - a) * Math.max(0, Math.min(1, t));
   const local = (start: number, end: number) => (p - start) / (end - start);
 
+  if (p <= B.heroFade.e) return 0; // frozen during hero intro + fade
   if (p <= B.armySalute.e) return Math.round(lerp(0, 119, local(B.armySalute.s, B.armySalute.e)));
   if (p <= B.armyFade.e) return 119;
   if (p <= B.eyeZoom.e) return Math.round(lerp(120, 159, local(B.eyeZoom.s, B.eyeZoom.e)));
@@ -140,6 +143,10 @@ export function CinematicSection() {
   const framesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
   const currentFrameRef = useRef(0);
   const loadedBatchRef = useRef(0);
+
+  // Hero layers
+  const flagVideoRef = useRef<HTMLDivElement>(null);
+  const heroTextRef = useRef<HTMLDivElement>(null);
 
   // Backgrounds
   const desertBgRef = useRef<HTMLDivElement>(null);
@@ -303,8 +310,12 @@ export function CinematicSection() {
       const svgLines = armySvgRef.current?.querySelectorAll(".svg-connector-line");
       const armyTips = [armyTip1, armyTip2, armyTip3, armyTip4].map((r) => r.current);
 
-      // Initial hidden states
-      gsap.set(canvasWrapRef.current, { opacity: 0, scale: 1.2, xPercent: 0 });
+      // Initial states — canvas + hero visible from the start
+      gsap.set(canvasWrapRef.current, { opacity: 1, scale: 1.2, xPercent: 0 });
+      if (desertBgRef.current) gsap.set(desertBgRef.current, { opacity: 0 });
+      if (terrainRef.current) gsap.set(terrainRef.current, { opacity: 0 });
+      if (sandRef.current) gsap.set(sandRef.current, { opacity: 0 });
+      if (dustRef.current) gsap.set(dustRef.current, { opacity: 0 });
       [armyHeadingRef, armyDescRef, armyPanelRef, afHeadingRef, afDescRef, afPanelRef,
         navyHeadingRef, navyDescRef, navyPanelRef].forEach((r) => {
         if (r.current) gsap.set(r.current, { opacity: 0 });
@@ -350,32 +361,47 @@ export function CinematicSection() {
             loadedBatchRef.current = 3;
           }
 
-          /* ── 2. Canvas wrapper transforms (army zoom + shift) ── */
+          /* ── 2. Hero layers (flag video + text fade out) ── */
+          {
+            const textFade = ramp(p, B.heroIntro.e * 0.8, B.heroFade.s + (B.heroFade.e - B.heroFade.s) * 0.4);
+            const flagFade = ramp(p, B.heroFade.s, B.heroFade.e);
+            if (heroTextRef.current) {
+              gsap.set(heroTextRef.current, { opacity: 1 - textFade, y: -40 * textFade });
+            }
+            if (flagVideoRef.current) {
+              gsap.set(flagVideoRef.current, { opacity: 1 - flagFade });
+            }
+          }
+
+          /* ── 3. Canvas wrapper transforms (zoom out starts during heroFade) ── */
           if (canvasWrapRef.current) {
-            const fadeIn = ramp(p, 0, 0.02);
-            const zoomOut = ramp(p, 0, B.armySalute.e * 0.65);
+            const zoomOut = ramp(p, B.heroFade.s, B.armySalute.e * 0.65);
             const scale = 1.2 - 0.2 * zoomOut;
             const shiftR = ramp(p, B.armySalute.e - 0.03, B.armySalute.e);
             const shiftBack = ramp(p, B.armyFade.s, B.armyFade.e);
             const xPct = SOLDIER_SHIFT_X * shiftR * (1 - shiftBack);
-            gsap.set(canvasWrapRef.current, { opacity: fadeIn, scale, xPercent: xPct });
+            gsap.set(canvasWrapRef.current, { scale, xPercent: xPct });
           }
 
-          /* ── 3. Backgrounds (desert → dark during eye-zoom) ── */
-          const bgFade = ramp(p, B.armyFade.s, B.eyeZoom.s + 0.02);
-          [desertBgRef, terrainRef, sandRef, dustRef].forEach((r) => {
-            if (r.current) gsap.set(r.current, { opacity: 1 - bgFade });
-          });
-          if (darkBgRef.current) gsap.set(darkBgRef.current, { opacity: bgFade });
+          /* ── 4. Backgrounds (desert fades in during heroFade, out during eye-zoom) ── */
+          {
+            const desertIn = ramp(p, B.heroFade.s, B.heroFade.e);
+            const desertOut = ramp(p, B.armyFade.s, B.eyeZoom.s + 0.02);
+            const desertOp = desertIn * (1 - desertOut);
+            [desertBgRef, terrainRef, sandRef, dustRef].forEach((r) => {
+              if (r.current) gsap.set(r.current, { opacity: desertOp });
+            });
+            if (darkBgRef.current) gsap.set(darkBgRef.current, { opacity: desertOut });
+          }
 
-          /* ── 4. Gradient overlays (visible during jet/carrier for text legibility) ── */
+          /* ── 5. Gradient overlays (visible during jet/carrier for text legibility) ── */
           const gradShow = ramp(p, B.eyeZoom.e - 0.02, B.jet.s + 0.02);
           const gradHide = ramp(p, B.navyFade.s, B.navyFade.e);
           const gradOp = gradShow * (1 - gradHide);
           if (leftGradRef.current) gsap.set(leftGradRef.current, { opacity: gradOp });
           if (bottomGradRef.current) gsap.set(bottomGradRef.current, { opacity: gradOp });
 
-          /* ── 5. Army info (during armyDwell, fades during armyFade) ── */
+          /* ── 6. Army info (during armyDwell, fades during armyFade) ── */
           {
             const ds = B.armyDwell.s;
             const de = B.armyDwell.e;
@@ -404,7 +430,7 @@ export function CinematicSection() {
             });
           }
 
-          /* ── 6. Air Force info (during afDwell, fades during afFade) ── */
+          /* ── 7. Air Force info (during afDwell, fades during afFade) ── */
           {
             const ds = B.afDwell.s;
             const de = B.afDwell.e;
@@ -430,7 +456,7 @@ export function CinematicSection() {
             }
           }
 
-          /* ── 7. Navy info (during navyDwell, fades during navyFade) ── */
+          /* ── 8. Navy info (during navyDwell, fades during navyFade) ── */
           {
             const ds = B.navyDwell.s;
             const de = B.navyDwell.e;
@@ -477,15 +503,36 @@ export function CinematicSection() {
     <ParallaxSection
       ref={sectionRef}
       id="cinematic"
-      className="parallax-section !h-[1880vh] !overflow-visible"
+      className="parallax-section !h-[1980vh] !overflow-visible"
     >
       <div ref={viewportRef} className="sticky top-0 h-screen w-full overflow-hidden">
 
-        {/* ── Backgrounds ── */}
+        {/* ── Hero: Flag video background ── */}
+        <div ref={flagVideoRef} className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="h-full w-full object-cover"
+          >
+            <source src="/videos/waving_flag.mp4" type="video/mp4" />
+          </video>
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.5) 100%)",
+            }}
+          />
+        </div>
+
+        {/* ── Backgrounds (hidden initially, fade in during heroFade) ── */}
         <div
           ref={desertBgRef}
           className="absolute inset-0 z-0"
           style={{
+            opacity: 0,
             background:
               "radial-gradient(ellipse 120% 100% at 60% 50%, #3a2818 0%, #2a2018 40%, #1e1810 70%, #1a1510 100%)",
           }}
@@ -788,6 +835,35 @@ export function CinematicSection() {
           </div>
         </div>
 
+
+        {/* ── Hero text overlay ── */}
+        <div className="absolute inset-0 z-[8] pointer-events-none">
+          <div ref={heroTextRef} className="h-full flex flex-col items-center justify-center text-center px-4">
+            <h1
+              className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-[0.12em] leading-tight"
+              style={{
+                fontFamily: "var(--font-display)",
+                color: "#c4a35a",
+                textShadow: "0 0 40px rgba(196,163,90,0.35), 0 2px 12px rgba(0,0,0,0.9)",
+              }}
+            >
+              INDIAN
+              <br />
+              ARMED FORCES
+            </h1>
+            <div className="mt-5 w-32 mx-auto gold-divider" />
+            <h2
+              className="text-lg md:text-2xl lg:text-3xl tracking-[0.3em] mt-4 uppercase font-semibold"
+              style={{
+                fontFamily: "var(--font-heading)",
+                color: "#e8dcc8",
+                textShadow: "0 1px 6px rgba(0,0,0,0.8)",
+              }}
+            >
+              DEFEND &middot; SERVE &middot; PROTECT
+            </h2>
+          </div>
+        </div>
 
         {/* ── Dust particles (army atmosphere) ── */}
         <div ref={dustRef} className="absolute inset-0 z-[9] pointer-events-none">
