@@ -103,7 +103,7 @@ function anchorToPct(imgXFrac: number, imgYFrac: number, cw: number, ch: number)
     dw = cw; dh = cw / imgAspect; dx = 0; dy = (ch - dh) / 2;
   }
   return {
-    left: ((dx + imgXFrac * dw) / cw) * 100 + SOLDIER_SHIFT_X,
+    left: ((dx + imgXFrac * dw) / cw) * 100,
     top: ((dy + imgYFrac * dh) / ch) * 100,
   };
 }
@@ -159,6 +159,7 @@ export function CinematicSection() {
   const armyTip3 = useRef<HTMLDivElement>(null);
   const armyTip4 = useRef<HTMLDivElement>(null);
   const armySvgRef = useRef<SVGSVGElement>(null);
+  const armyTooltipWrapRef = useRef<HTMLDivElement>(null);
 
   // AF info refs
   const afHeadingRef = useRef<HTMLDivElement>(null);
@@ -352,6 +353,9 @@ export function CinematicSection() {
             const shiftBack = ramp(p, B.armyFade.s, B.armyFade.e);
             const xPct = SOLDIER_SHIFT_X * shiftR * (1 - shiftBack);
             gsap.set(canvasWrapRef.current, { scale, xPercent: xPct });
+            // Sync SVG + tooltip overlays with same transform so dots track the soldier
+            if (armySvgRef.current) gsap.set(armySvgRef.current, { scale, xPercent: xPct });
+            if (armyTooltipWrapRef.current) gsap.set(armyTooltipWrapRef.current, { scale, xPercent: xPct });
           }
 
           /* ── 4. Backgrounds (desert fades in during heroFade, out during eye-zoom) ── */
@@ -589,7 +593,7 @@ export function CinematicSection() {
         <svg
           ref={armySvgRef}
           className="absolute inset-0 z-[5] pointer-events-none"
-          style={{ overflow: "visible", filter: "drop-shadow(0 0 2px rgba(196,163,90,0.25))" }}
+          style={{ overflow: "visible", filter: "drop-shadow(0 0 2px rgba(196,163,90,0.25))", transformOrigin: "center 40%" }}
         >
           {anchors.map((anchor, i) => {
             const endX = anchor.left + LINE_OFFSETS[i].dx;
@@ -668,7 +672,7 @@ export function CinematicSection() {
         </div>
 
         {/* Army equipment tooltips */}
-        <div className="absolute inset-0 z-[7] pointer-events-none">
+        <div ref={armyTooltipWrapRef} className="absolute inset-0 z-[7] pointer-events-none" style={{ transformOrigin: "center 40%" }}>
           {[
             { ref: armyTip1, anchor: anchors[0], label: "Ballistic Helmet", width: 60, details: [
               { spec: "Protection", value: "NIJ Level IIIA" }, { spec: "Material", value: "Kevlar Composite" },
